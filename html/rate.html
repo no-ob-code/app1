@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/framework7.material.colors.min.css">
+    <link rel="stylesheet" href="../css/framework7.material.min.css">
+    <style>
+        #data {
+            text-align: center;
+            padding-top: 30%
+        }
+
+        .country_icon {
+            /* width: 120px; */
+            overflow: hidden;
+            padding: 0 10%;
+            /* float: left; */
+        }
+
+        .country_icon>ul {
+            width: 45%;
+            height: 46px;
+            overflow: hidden;
+            float: left;
+        }
+
+        .ul_list {
+            transition: height 1s;
+        }
+
+        .country {
+            height: 46px;
+            line-height: 46px;
+            align-items: center;
+            border: 1px solid #333;
+            margin-bottom: 5px;
+        }
+
+        .country>span {
+            float: left;
+            padding-left: 10px
+        }
+
+        .icon {
+            width: 36px;
+            height: 36px;
+            margin-top: 5px;
+            margin-left: 5px;
+            float: left;
+        }
+
+        .number {
+            width: 55%;
+            height: 46px;
+            padding: 0 3%;
+            font-size: 20px;
+            float: left;
+            border: 1px solid #333;
+            text-align: right;
+            border-left: 0;
+        }
+
+        .down {
+            width: 24px;
+            position: absolute;
+            top: 18.5%;
+            left: 38%;
+            transition: all 1s;
+            transform: rotate(0deg);
+        }
+
+            .country_icon ul.max+.down{
+                transform: rotate(180deg);
+            }
+
+        .rate {
+            margin-top: 20px
+        }
+
+        .req_li {
+            height: 46px;
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 46px;
+            border: 1px solid #333;
+            padding: 0 0 0 10%;
+
+        }
+
+        .name {
+            float: left;
+            margin-left: 5%
+        }
+
+        .country_icon ul.max {
+            height: 405px;
+        }
+
+        .min {
+            height: 46px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="data">
+        <div class="country_icon">
+            <ul class="ul_list" v-bind:class="{max : !change}">
+                <li class="country country_model">
+                    <img :src="['../images/icon/'+countryActive.name+'.png']" class="icon" alt="">
+                    <span>{{countryActive.name2}}</span>
+                </li>
+                <li class="country" @click="change =! change;getKay(v,k)" v-for="(v,k,i) in country">
+                    <img :src="['../images/icon/'+k+'.png']" :data-name="[k]" class="icon" alt="">
+                    <span>{{v}}</span>
+                </li>
+            </ul>
+            <img src="../images/down.png" class="down" @click="change =! change" alt="">            
+            <input type="number" class="number" pattern="[0-9]*" v-model="money" @click="input">
+        </div>
+        <div class="rate">
+            <ul>
+                <li class="req_li" v-for='(v,k) in req'>
+                    <img :src="['../images/icon/'+k+'.png']" :data-name="[k]" class="icon" alt="">
+                    <span class="name">{{country[k]}}</span>
+                    <span>{{money*v}}
+
+                    </span>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+
+
+
+
+</body>
+<script src="../js/framework7.min.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+<script>
+    const app = new Vue({
+        el: "#data",
+        data: {
+            req: {},
+            money: 1,
+            change: true,
+            countryActive: { name: 'CNY', name2: '人民币' },
+            country: {
+                "CNY": "人民币",
+                'USD': "美元",
+                "JPY": "日元",
+                "GBP": "英镑",
+                "AUD": "澳币",
+                "CAD": "加币",
+                "KRW": "韩元",
+            }
+        },
+        created() {
+            fetch("http://api.fixer.io/latest?base=CNY", {
+                method: "get",
+            }).then(response => response.json()).then(json => {
+                // this.req = json.rates;
+                for (var key in this.country) {
+                    if (json.rates.hasOwnProperty(key)) {
+                        let k = key;
+                        let v = json.rates[key];
+                        this.$set(this.req, k, v);
+                    }
+                }
+            })
+            // console.log(this.req['AUD'])
+        },
+        methods: {
+            input (event) {
+                this.money = ''
+            },
+            change_country (event) {
+                // this.change = true;
+                console.log(event)
+            },
+            getKay(v, key) {
+                this.countryActive = { name2: v, name: key }
+                console.log(key)
+                fetch(`http://api.fixer.io/latest?base=${key}`, {
+                    method: "get",
+                }).then(response => response.json()).then(json => {
+                    this.req = {};
+                    for (var key in this.country) {
+                        if (json.rates.hasOwnProperty(key)) {
+                            let k = key;
+                            let v = json.rates[key];
+                            this.$set(this.req, k, v);
+                        }
+                    }
+                })
+            }
+        }
+    })
+    // 
+</script>
+
+</html>
