@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="css/reset.css" />
+	<link rel="stylesheet" type="text/css" href="css/framework7.material.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/framework7.material.colors.min.css" />
+	<style type="text/css">
+		html,
+		body {
+			background: #DCDCDC;
+		}
+
+		.top_box {
+			height: 120px;
+			background: url(images/bg.jpg) no-repeat;
+			background-size: 100% 100%
+		}
+
+		.top_box > h3{
+			color: #fff;
+			padding-top: 30px
+		}
+
+		.grid {
+			padding: 10px 30px
+		}
+
+		.grid>div {
+			height: 35px;
+			line-height: 35px;
+			text-align: center;
+			background: #fff;
+			margin-top: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<!---------------------------顶部布局-------------------------->
+	<div class="top_box">
+		<h3>个人娱乐</h3>
+	</div>
+	<!---------------------------栅格布局-------------------------->
+	<div class="row grid">
+		<!-- Each "cell" has col-[widht in percents] class -->
+		<div class="col-40 button button-fill color-teal">汇率换算</div>
+		<div class="col-40 button button-fill color-teal">快递查询</div>
+
+	</div>
+</body>
+<script src="js/mui.min.js"></script>
+<script src="js/framework7.min.js"></script>
+<script src="js/vue.js"></script>
+<script type="text/javascript">
+    var myApp = new Framework7({
+        material: true
+    });
+</script>
+
+</html>
